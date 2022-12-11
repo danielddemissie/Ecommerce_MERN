@@ -1,1 +1,1 @@
-# Ecommerce with MERN stack creatd with vite
+# Ecommerce with MERN stack created with vite
