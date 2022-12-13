@@ -1,57 +1,47 @@
-console.log("Hello World");
-const express = require("express");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+import express, { Request, Response } from "express";
+import path from "path";
+import dotenv from "dotenv";
+import connectDB from "./config/db";
+import { notFound, errorHandler } from "./middleware/errorMiddleware";
 
-const userRoutes = require("./routes/user");
-const cartRoutes = require("./routes/cart");
-const orderRoutes = require("./routes/order");
-const productRoutes = require("./routes/product");
-const authRoutes = require("./routes/auth");
-const stripeRoutes = require("./routes/stripe");
+// Routes
+import productRoutes from "./routes/product";
+import userRoutes from "./routes/user";
+import orderRoutes from "./routes/order";
+import uploadRoutes from "./routes/upload";
+import morgan from "morgan";
+import { nodeEnv } from "./config";
 
-dotenv.config();
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-// Parse the body text
-app.use(bodyParser.json());
+// Middleware to accept JSON in body
+app.use(express.json());
 
-// CORS
-app.use((req: any, res: any, next: () => any) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
+// Morgan logging
+app.use(morgan("dev"));
+
+dotenv.config();
+
+connectDB();
+
+app.get("/", (_req: Request, res: Response) => {
+  res.send("API IS RUNNING...");
 });
 
-// Routes
-app.use("/api/users", userRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/carts", cartRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/checkout", stripeRoutes);
+app.use("/api/products/", productRoutes);
+app.use("/api/users/", userRoutes);
+app.use("/api/orders/", orderRoutes);
+app.use("/api/upload", uploadRoutes);
 
-// Error
-app.use((req: any, res: any) => {
-  res.status(404).json({
-    message: "Error serving the request !",
-  });
+// Make uploads folder static
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
+// Use Middleware
+app.use(notFound);
+app.use(errorHandler);
+
+app.listen(PORT, () => {
+  console.log(`Server running in ${nodeEnv} mode on port ${PORT}`);
 });
-
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => {
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((error: Error) => {
-    console.log(error);
-  });
