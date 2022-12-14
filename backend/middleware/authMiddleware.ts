@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "../types/express";
 import jwt, { Secret } from "jsonwebtoken";
-// import { User } from "../models/";
+import { User } from "../models/";
 import asyncHandler from "express-async-handler";
 import { jwtSecrete } from "../config";
-
 interface Decoded {
   id: string;
   iat: Date;
@@ -27,8 +26,13 @@ const protect = asyncHandler(
         token = req.headers.authorization.split(" ")[1];
 
         const decoded = jwt.verify(token, secret) as unknown as Decoded;
-        console.log(decoded);
-        // req.user = await User.findById(decoded?.id).select("-password");
+        const _user = (await User.findById(decoded.id).select("-password")) as {
+          _id: string;
+          name: string;
+          email: string;
+          isAdmin?: boolean | undefined;
+        };
+        req.user = _user;
         next();
       } catch (error) {
         console.error(error);
