@@ -2,12 +2,15 @@ import { Request } from "backend/types";
 import express from "express";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 
 const router = express.Router();
 
 const storage = multer.diskStorage({
   destination(_req, _file, cb) {
-    cb(null, "uploads/");
+    const uploadPath = "uploads/";
+    !fs.existsSync(uploadPath) && fs.mkdirSync(uploadPath);
+    cb(null, uploadPath);
   },
   filename(_req, file, cb) {
     cb(
