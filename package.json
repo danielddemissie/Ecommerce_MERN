@@ -6,7 +6,7 @@
     "server:dev": "nodemon --watch './**/*.ts' --exec 'ts-node' ./backend/server.ts",
     "server:prod": "tsc && nodemon build/server.js",
     "client": "npm start --prefix frontend",
-    "dev": "concurrently \"npm run server:dev\" \"npm run client\""
+    "dev": "concurrently \"yarn run server:dev\" \"yarn run client\""
   },
   "repository": "https://github.com/apicgg/vite-mern-template.git",
   "author": "Anurag Pramanik <p.anurag@outlook.com>",
