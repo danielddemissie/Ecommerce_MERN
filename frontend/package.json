@@ -9,14 +9,20 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",
-    "axios": "^1.2.0",
+    "axios": "^1.2.1",
+    "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
     "react-icons": "^4.7.1",
-    "react-redux": "^8.0.2",
-    "react-router-dom": "^6.4.4",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.4.5",
     "react-toastify": "^9.0.7",
-    "vite-plugin-svgr": "^2.2.1"
+    "redux": "^4.2.0",
+    "redux-injectors": "^2.1.0",
+    "redux-saga": "^1.2.2",
+    "vite-plugin-svgr": "^2.2.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/react": "^18.0.15",
