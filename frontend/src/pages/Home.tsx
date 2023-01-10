@@ -1,17 +1,29 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectHomePage } from "../redux/selector/home";
-import { useHomepageSlice } from "../redux/slice/home";
+import Card from "../components/Card";
+import { userAction } from "../redux/slice/user";
 
 export default function Home() {
-  const { actions } = useHomepageSlice();
-  const dispatch = useDispatch();
-  const homepageState = useSelector(selectHomePage);
+  const disptach = useDispatch();
+  const { data: allUsers, isLoading } = useSelector(
+    (state: any) => state.users
+  );
 
   React.useEffect(() => {
-    dispatch(actions.act());
-    console.log(homepageState);
+    disptach(userAction.loadUsers());
   }, []);
 
-  return <div>Home </div>;
+  return (
+    <div className="App">
+      {isLoading ? (
+        <div>
+          <h2>Loading...</h2>
+        </div>
+      ) : (
+        allUsers.map((user: any, index: number) => (
+          <Card key={index} user={user} />
+        ))
+      )}
+    </div>
+  );
 }

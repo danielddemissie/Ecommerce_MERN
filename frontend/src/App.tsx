@@ -1,13 +1,16 @@
-import React from "react";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
 
 function App() {
   return (
-    <div className="App">
-      <h1 className="text-5xl font-bold underline">Hello world!</h1>
-      <button className="bg-sky-700 px-4 py-2 text-white hover:bg-sky-800 sm:px-8 sm:py-3">
-        hello
-      </button>
-    </div>
+    <BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
   );
 }
 
